@@ -6,7 +6,7 @@ This is a simple game. Reverse engineer it to figure out what "weapon codes" you
 
 So off the bat we know that the `.exe` file will be some sort of game for which we'll have to find a set of two "weapon codes". Let's execute file and see what happens.
 
-![[Pasted image 20250304160328.png]]
+<img width="1175" alt="Pasted image 20250304160328" src="https://github.com/user-attachments/assets/e5f91699-e8b3-4c64-8499-e36dfe14a017" />
 
 ## Stage 1
 
@@ -22,7 +22,8 @@ Binaries contain many strings, but most of them are baked in automatically and a
 
 Anyway, quite at the start of the binary you'll find strings like `explosionPictureBox`, `VictoryForm` and `Memecat Battlestation [Shareware Demo] - You parents credit card can unlock finul boss level please buy`, which are quite obviously custom. Among them, you'll also find a string `RAINBOW`, which catches the eye, as it's not a valid function or variable name and also does not have any obvious purpose.
 
-![[Pasted image 20250304163046.png]]
+<img width="1581" alt="Pasted image 20250304163046" src="https://github.com/user-attachments/assets/bd347b8d-c9ec-49e7-91b2-3558038d5d5c" />
+
 
 Turns out this is indeed the weapon code we were looking for. Entering it and pressing the fire-button causes an animation to play in which an enemy cat is brutally killed by a rainbow-laser :(
 
@@ -30,11 +31,13 @@ However, this feels a bit like cheating. For learning's sake, let's also use a d
 
 In the Assembly View we'll see a bunch of modules loaded. Each of these modules contain code that the binary uses. One of them is the code of the executable itself. Expanding that module, we see a few different namespaces.
 
-![[Pasted image 20250304203547.png]]
+<img width="442" alt="Pasted image 20250304203547" src="https://github.com/user-attachments/assets/082939d7-f865-4904-a320-ab890d53d65d" />
+
 
 The namespaces `Stage1Form`, `Stage2Form` and `VictoryForm` seem important and their relation to the game is immediately quite clear. Since we're still focused on the first stage, let's pop open Stage 1.
 
-![[Pasted image 20250304203749.png]]
+<img width="391" alt="Pasted image 20250304203749" src="https://github.com/user-attachments/assets/6e04814b-e15f-4494-b5ad-51543aa6f571" />
+
 
 We're met with a bunch of different functions, most of which have quite obvious functions. We can assume the weapon code we've entered will be verified at the moment we press the fire-button, so a logical place to start is the `FireButton_Click()` function. Immediately our smart thinking is rewarded as we find the following piece of code:
 
