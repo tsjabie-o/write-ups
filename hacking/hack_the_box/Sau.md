@@ -1,6 +1,5 @@
----
-difficulty: easy
----
+Sau is a machine on HTB. It's a **Linux** box, which hosts a **`Request-baskets`-service**. We use **Serverside request forgery** to bypass the server's firewall. We then use **command-injection** in a the login-form of a Mailserver to get a foothold. Finally, we use a **sudo-misconfiguration** to open a **pager** as the root-user.
+
 I am given just an IP address. As standard, I start with an `nmap` scan, to start getting a feel for the server. We use `-sV` and `-sC`, which are scripts that wil find the services and their version running on the server, as well as some other useful information.
 ```bash
 nmap -sC -sV -oN nmap/initial.out 10.10.11.224
@@ -22,7 +21,7 @@ So we generate a bucket and change the settings such that requests are forwarded
 
 The page we see is very barebones, but we can see that this port has a service running called `Maltrail 0.53`. We search for any known exploits and find that the service is susceptible to [Command Injection](https://github.com/spookier/Maltrail-v0.53-Exploit). There is a login page over at `/login` and when checking the supplied `username` data, it uses `subprocess.check_output()` to log the username using a shell command. It however does not sanitize this `username` input, so we can inject arbitrary commands into it. 
 
-We download the [python script](https://github.com/spookier/Maltrail-v0.53-Exploit) which uses this exploit. At this point, because I am actively trying to learn, I try to stay away from running convienent scripts and instead figure out how to do things manually. Thus instead of simply running the script I look at its source code to see what is going on under the hood.
+We download the [python script](https://github.com/spookier/Maltrail-v0.53-Exploit) which uses this exploit. At this point, because I am actively trying to learn, I try to stay away from running convenient scripts and instead figure out how to do things manually. Thus instead of simply running the script I look at its source code to see what is going on under the hood.
 
 I see that the script sends a POST request with a payload containing the to-be-injected command to the `/login` directory. Of course, this script assumes that we have direct acccess to the Maltrail service at port 80, but we do not, so we would have to send the request to the bucket proxy.
 
@@ -56,6 +55,6 @@ We find the following output:
 ```
 This means that this user can execture the `systemctl status trail.service` command as root, without supplying a password. This is a command that retrieves the status of the `trail.service` service, which turns out to be the service associated with Maltrail. Since this configuration would never occur on a normalm machine, I assume this is indeed the right direction to keep looking. 
 
-We search for some known exploits for `systemctl status`. While not explicitely an exploit perse, we find that the result of this command is opened in a pager, like `less`. The crucial point is that from that pager, we can actually spawn another shell, using `!sh`. However, since the pager run as root, this spawned shell will also run as root.
+We search for some known exploits for `systemctl status`. While not explicitely an exploit per se, we find that the result of this command is opened in a pager, like `less`. The crucial point is that from that pager, we can actually spawn another shell, using `!sh`. However, since the pager run as root, this spawned shell will also run as root.
 
 Being the root user now, we can `cat` out the contents of the `/root/root.txt` flag and we have officially hacked this box!

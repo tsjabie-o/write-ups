@@ -1,4 +1,4 @@
-**Codify** is an easy HTB machine
+Codify is an HTB machine, with a **Linux** box that hosts a sandboxed **NodeJS-environment**. We exploit a known **CVE** through which we **escape the sandbox** and gain **RCE**. In an **`sqlite3`** database we find **hashed** user credentials. We use **`johntheripper`** to crack this hash. We abuse a **`sudo`-misconfiguration** to run a backup **`bash`-script**. This script incorrectly uses pattern-matching to check for a valid user password, which allows us to **inject** a wildcard value and cheat this check. We create a **python** script that uses wildcards to extrapolate the root-password.
 
 ## Reconnaissance
 We are given an IP-address: 10.10.11.239

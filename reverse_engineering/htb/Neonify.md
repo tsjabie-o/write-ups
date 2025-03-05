@@ -1,5 +1,4 @@
-#writeup 
-[**Neonify**](https://app.hackthebox.com/challenges/neonify) is an *easy* challenge on HTB.
+[Neonify](https://app.hackthebox.com/challenges/neonify) is a challenge on HTB. In it, we **reverse engineer** a **Ruby** program to extract the key from an external server. To do that we use **regular expression** combined with **string injection** to circumvent **string sanitation**. 
 
 We are supplied with two things:
 - The IP-address and port number of a remote docker container running a website

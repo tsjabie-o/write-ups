@@ -1,4 +1,4 @@
-[Devvortex](https://app.hackthebox.com/machines/Devvortex) is an *easy* machine on HTB.
+[Devvortex](https://app.hackthebox.com/machines/Devvortex) is a machine on HTB. We use **directory- and vhost-fuzzing** with **`gobuster`** to layout our attack surface. We find a subdomain that hosts a **`Joomla!`** service. This version of `Joomla!` has a known **CVE** that allows us to read from its **`mysql`** database, which contains user credentials. We then **inject `php`-code** which grants us a **web-shell** and in turn allows us a **reverse-shell**. We then find another **BCrypt-hashed** password and use **`johntheripper`** to crack it. We then use a **`sudo`-misconfiguration** to run a pager as root.
 
 ---
 

@@ -1,4 +1,4 @@
-Broker is a retired machine on HTB Labs with an *easy* difficulty rating. Here is my write-up for it.
+Broker is a retired machine on HTB Labs, based on a **Linux** server and an **`ActiveMQRealm`** web-application. We use a known **CVE** for this service, sending an encoded payload to the message broker, forcing it to **execute arbitrary code**. We setup a local **`nc`-listener** and force the server to create a reverse shell. With a foothold on the machine, we find that we're allowed to **`sudo nginx`**. We use this to add a **public `ssh`-key** to the root folder and gain access as `root`.
 
 ## Reconnaissance
 
@@ -57,7 +57,7 @@ We find [a script](https://github.com/X1r0z/ActiveMQ-RCE) written in `Go` that e
 python -m http.server
 # starts a server on port 8000
 ```
-In this xml file is the setup for this remote code execution, where we can insert out desired command. First we just want to test whether we do indeed get code execution, by having the server ping our host.
+In this xml file is the setup for this remote code execution, where we can insert our desired command. First we just want to test whether we do indeed get code execution, by having the server ping our host.
 
 ```xml
 # file: poc.xml

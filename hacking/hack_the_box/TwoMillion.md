@@ -1,6 +1,6 @@
-[Twomillion](https://app.hackthebox.com/machines/TwoMillion) is a retired *easy* machine on HTB Labs.
+[Twomillion](https://app.hackthebox.com/machines/TwoMillion) is a machine on HTB Labs. We use **subdirectory-fuzzing** and the page source-code to find access to an **API**. We find some **ROT13** encrypted information there which tells us how to generate an invite key through the API. We then misuse a misconfiguration in this API to make ourselves an admin.  Finally we use a known **FUSE CVS** to gain root-access.
 
-## Reconnaisance
+## Reconnaissance
 
 As always, we receive an IP addres: `10.10.11.221`. First, we want to get a general overview of this machine and the services running on it. For that, we use our trusty `nmap` to find any interesting open or filtered ports.
 
