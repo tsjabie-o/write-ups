@@ -1,7 +1,3 @@
-string missing
-rich header, DanS? https://0xrick.github.io/win-internals/pe3/
-encoding overlong https://kevinboone.me/overlong.html
-
 ## Simple analysis
 In the folder we find two files:
 - `Overlong.exe`
@@ -17,7 +13,8 @@ There's definitely a hint here that points towards the term *overlong*. I was no
 
 When I executed the `.exe` file, the following dialog box popped up:
 
-![[Pasted image 20250311082246.png]]
+![Pasted image 20250311082246](https://github.com/user-attachments/assets/097bce43-5c3d-42dc-8c40-88cc95dfce44)
+
 
 Selecting OK just closed out the program. 
 
@@ -31,7 +28,8 @@ I opened up the executable in `PE-Bear`. I learn the following general things:
 - Only `MessageBoxA()` from `USER32.dll` was (statically) imported
 - The raw and virtual size do not suggest *packing*
 
-  ![[Pasted image 20250311083236.png]]
+![Pasted image 20250311083236](https://github.com/user-attachments/assets/67cca7e3-e9d6-45ce-9ce1-060af7bab9fb)
+
 
 Looking at the strings, I noticed something interesting. First of all, there were very few of them, 8 to be exact. That can make sense since the program is so simple and small. However, though the string in the title of the dialog box (`Output`) was present, the string `I never broke the encoding: ` was not. That means the string is most probably saved in an encrypted or *encoded* form and decoded at runtime. 
 
@@ -42,7 +40,8 @@ I decided it was not time to crack open the executable in Ghidra.
 ### General function layout
 After the automatic analysis in Ghidra, the `main` function was detected. Before I dive into the instruction by instruction details of an executable, I try to get a broad view of the program's workings as much as possible. This can help point me in the right direction and save lots of time. To do this, I first looked at the function call tree, with the `main` function at the root:
 
-![[Pasted image 20250311085120.png]]
+![Pasted image 20250311085120](https://github.com/user-attachments/assets/a37f654f-8128-406d-ad84-791d33653f82)
+
 
 Luckily, the function call tree is extremely simple and there's really only two functions. I'll try and get a general sense of what these functions are doing.
 
@@ -125,7 +124,7 @@ Looking back, in `FUN_00401160` that same `param_1` `byte` pointer is increased 
 
 Now that I have a general sense of what the functions do, I will rename them to reflect this.
 
-![[Pasted image 20250311091017.png]]
+![Pasted image 20250311091017](https://github.com/user-attachments/assets/0412df63-0782-46d5-9125-216f202056b5)
 
 I now had a two leads I could further investigate:
 - The place where the decoded string and encoded data were stored
@@ -259,8 +258,9 @@ At this point, I thought I might need to find hidden encoded characters in the e
 
 Here I noticed something interesting though: 
 
-![[Pasted image 20250311201447.png]]
-![[Pasted image 20250311201519.png]]
+![Pasted image 20250311201447](https://github.com/user-attachments/assets/7890c54f-2791-4e0f-9082-df35652a7ec4)
+
+![Pasted image 20250311201519](https://github.com/user-attachments/assets/274914f3-e752-4411-8c20-1d42656aa589)
 
 When the string was almost completely decoded, the pointer into the encoded data was nowhere near the end. Notice that there are at least 112 bytes left in this data pocket. This is where my intuition told me that maybe the decoding process just had not finished yet. This would also explain the `:` at the end, like some more should be there.
 
@@ -279,6 +279,7 @@ return local_8;
 
 It seems that this loop terminates when `local_8` is equal to `param_3`. I found that `param_3`was just a hardcoded `0x1c` = `28`. So the decoding loop would only run for 28 iterations. Makes sense since the string `I never broke the encoding: ` is also 28 characters. I patched the value to be `0xFF` in `x32dbg` and let the program run. 
 
-![[Pasted image 20250311202346.png]]
+![Pasted image 20250311202346](https://github.com/user-attachments/assets/6b494b33-ad6e-44e4-9b04-bdd7176b4026)
+
 
 Et voila
