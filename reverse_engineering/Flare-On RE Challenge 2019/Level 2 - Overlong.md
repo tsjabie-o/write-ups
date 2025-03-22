@@ -36,7 +36,7 @@ Looking at the strings, I noticed something interesting. First of all, there wer
 This could further confirm my earlier suspicion that some part of the dialog box string has not been fully decoded.
 
 ## Disassembly in Ghidra
-I decided it was not time to crack open the executable in Ghidra. 
+I decided it was now time to crack open the executable in Ghidra. 
 ### General function layout
 After the automatic analysis in Ghidra, the `main` function was detected. Before I dive into the instruction by instruction details of an executable, I try to get a broad view of the program's workings as much as possible. This can help point me in the right direction and save lots of time. To do this, I first looked at the function call tree, with the `main` function at the root:
 
