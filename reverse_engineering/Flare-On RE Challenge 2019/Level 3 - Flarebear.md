@@ -12,11 +12,14 @@ We at Flare have created our own Tamagotchi pet, the flarebear. He is very fussy
 
 ## Emulating the .apk
 The first thing we'll do is just emulate and run the `flarebear.apk` file. Again, we can use Android Studio to spin up a virtual Android environment and install the apk file. When first starting the application, we'll be met with the following screen. 
-![[Pasted image 20250329213021.png]]
+
+![Pasted image 20250329213021](https://github.com/user-attachments/assets/ccc92cd5-1dc9-45ef-9fdc-3591cd35bbeb)
+
 
 Let's create a new flare bear! We'll call it `mybear`.
 
-![[New_Bear.png]]
+![New_Bear](https://github.com/user-attachments/assets/075f0e85-5ba4-4b2e-845c-3958d746ef3f)
+
 
 We can press different buttons to perform different actions with the bear. The first one makes them eat, the second one makes them play with a ball and the third one cleans up any poop that has accumulated on screen, which seems to happen some time after feeding the bear. We can notice that the bears shows two different emotions, happy or sad.
 
@@ -172,4 +175,5 @@ Feed: 8, Play: 4, Clean: 2
 Great, this also satisfies our first constraint!
 
 When we perform exactly these actions, we indeed see the flag:
-![[Flag.png]]
+
+![Flag](https://github.com/user-attachments/assets/afd7ffde-e5af-4024-8483-c3e8e8834ec0)
